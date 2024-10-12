@@ -4802,9 +4802,12 @@ void CSearchDlg::AutoSizeAllColumns()
     if (!fileList)
     {
         RECT rc{};
-        GetClientRect(hListControl, &rc); // excludes the vertical scroll bar
-        int  cxVScroll = GetSystemMetrics(SM_CXVSCROLL);
-        auto itemWidth = rc.right - rc.left - cxVScroll;
+        // ListView_GetItemRect returns the actual shown size excluding scroll bars.
+        // GetClientRect returns different size when the control has been shown (from file list view) or not (new search).
+        GetWindowRect(hListControl, &rc);
+        auto itemWidth = CDPIAware::Instance().Scale(*this, rc.right - rc.left) - 4;
+        if (nItemCount > ListView_GetCountPerPage(hListControl))
+            itemWidth -= GetSystemMetrics(SM_CXVSCROLL);
         auto totalWidth = std::accumulate(colWidths.begin(), colWidths.end(), 0);
         totalWidth -= colWidths[colWidths.size() - 2];
         auto textWidth = itemWidth - totalWidth;
