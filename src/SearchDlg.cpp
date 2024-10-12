@@ -4802,17 +4802,9 @@ void CSearchDlg::AutoSizeAllColumns()
     if (!fileList)
     {
         RECT rc{};
-        ListView_GetItemRect(hListControl, 0, &rc, LVIR_BOUNDS);
+        GetClientRect(hListControl, &rc); // excludes the vertical scroll bar
         int  cxVScroll = GetSystemMetrics(SM_CXVSCROLL);
         auto itemWidth = rc.right - rc.left - cxVScroll;
-        if (nItemCount > 0)
-        {
-            GetClientRect(hListControl, &rc);
-            if (itemWidth < rc.right - rc.left)
-            {
-                itemWidth = rc.right - rc.left;
-            }
-        }
         auto totalWidth = std::accumulate(colWidths.begin(), colWidths.end(), 0);
         totalWidth -= colWidths[colWidths.size() - 2];
         auto textWidth = itemWidth - totalWidth;
