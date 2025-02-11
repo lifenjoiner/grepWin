@@ -1,6 +1,6 @@
 // grepWin - regex search and replace for Windows
 
-// Copyright (C) 2007-2024 - Stefan Kueng
+// Copyright (C) 2007-2025 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -80,6 +80,7 @@ namespace
 {
 
 constexpr auto SearchEditSubclassID = 4321;
+std::wstring   g_utf8ReplaceWarningShownForSearchPath;
 
 void           drawRedEditBox(HWND hWnd, WPARAM wParam)
 {
@@ -1377,14 +1378,20 @@ LRESULT CSearchDlg::DoCommand(int id, int msg)
                 }
                 if (m_bReplace && m_bUTF8)
                 {
-                    auto utf8OptionText = GetDlgItemText(IDC_UTF8);
-                    auto msgText        = CStringUtils::Format(TranslatedString(hResource, IDS_REPLACEUTF8).c_str(),
-                                                               utf8OptionText.get());
-                    if (::MessageBox(*this, msgText.c_str(), L"grepWin", MB_ICONWARNING | MB_YESNO | MB_DEFBUTTON2) != IDYES)
+                    if (g_utf8ReplaceWarningShownForSearchPath != m_searchPath)
                     {
-                        break;
+                        g_utf8ReplaceWarningShownForSearchPath = m_searchPath;
+                        auto utf8OptionText = GetDlgItemText(IDC_UTF8);
+                        auto msgText        = CStringUtils::Format(TranslatedString(hResource, IDS_REPLACEUTF8).c_str(),
+                                                                   utf8OptionText.get());
+                        if (::MessageBox(*this, msgText.c_str(), L"grepWin", MB_ICONWARNING | MB_YESNO | MB_DEFBUTTON2) != IDYES)
+                        {
+                            break;
+                        }
                     }
                 }
+                else
+                    g_utf8ReplaceWarningShownForSearchPath.clear();
                 m_bConfirmationOnReplace = true;
                 m_bNotSearch             = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
                 if (id == IDC_INVERSESEARCH)
@@ -4252,7 +4259,7 @@ int CSearchDlg::SearchOnTextFile(CSearchInfo& sInfo, const std::wstring& searchR
             if (m_bReplace)
             {
                 std::copy(startIter, whatC[0].first, replacedIter);
-                regex_replace(replacedIter, whatC[0].first, whatC[0].second, wRegEx, replaceFmt, mFlags);
+                regex_replace(replacedIter, whatC[0].first, whatC[0].second, wRegEx, std::ref(replaceFmt), mFlags);
             }
             //
             startIter = whatC[0].second;
@@ -4501,14 +4508,14 @@ int CSearchDlg::SearchByFilePath(CSearchInfo& sInfo, const std::wstring& searchR
                     std::wstring replaced;
                     auto         replacedIter = std::back_inserter(replaced);
                     outFileBufA.sputn(reinterpret_cast<const char*>(startIter), (whatC[0].first - startIter) * 2);
-                    regex_replace(replacedIter, whatC[0].first, whatC[0].second, regEx, replaceFmt, mFlags);
+                    regex_replace(replacedIter, whatC[0].first, whatC[0].second, regEx, std::ref(replaceFmt), mFlags);
                     outFileBufA.sputn(reinterpret_cast<const char*>(replaced.c_str()), replaced.length() * 2);
                 }
                 else
                 {
                     std::ostreambuf_iterator<char> outIter(&outFileBufA);
                     outFileBufA.sputn(startIter, whatC[0].first - startIter);
-                    regex_replace(outIter, whatC[0].first, whatC[0].second, regEx, replaceFmt, mFlags);
+                    regex_replace(outIter, whatC[0].first, whatC[0].second, regEx, std::ref(replaceFmt), mFlags);
                 }
             }
             //
