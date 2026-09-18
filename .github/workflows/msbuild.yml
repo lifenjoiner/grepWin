@@ -76,9 +76,12 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
           name: grepWin-${{matrix.platform}}_portable
-          path: bin/${{matrix.dir}}/grepWin-${{matrix.platform}}_portable.exe
+          path: |
+            bin/${{matrix.dir}}/grepWin-${{matrix.platform}}_portable.exe
+            bin/${{matrix.dir}}/grepWin.pdb
     - name: Upload artifacts for ${{matrix.platform}} msi
       uses: actions/upload-artifact@v7
+      if: ${{matrix.configuration == 'Release'}}
       with:
           name: grepWin-${{matrix.platform}}-msi
           path: bin/*.msi
