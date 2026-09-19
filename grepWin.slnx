@@ -1,0 +1,21 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Win32" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/.nuget/">
+    <File Path=".nuget/NuGet.Config" />
+    <File Path=".nuget/NuGet.exe" />
+    <File Path=".nuget/NuGet.targets" />
+  </Folder>
+  <Folder Name="/Setup/">
+    <File Path="src/Setup/AppXManifest.xml.in" />
+    <File Path="src/Setup/setup.build" />
+    <File Path="src/Setup/Setup.wxs" />
+    <Project Path="src/Setup/CustomActions/CustomActions.vcxproj" Id="454d5fcc-e25a-4b45-9ca2-01abb0fa5181">
+      <BuildType Project="Release" />
+    </Project>
+  </Folder>
+  <Project Path="src/ExplorerCommandVerb/ExplorerCommandVerb.vcxproj" Id="585a1606-dc66-49ba-bffb-e6f0b63a66bf" />
+  <Project Path="src/grepWin.vcxproj" Id="0049f8cf-1bec-4e6e-b457-0187a33ad522" />
+</Solution>

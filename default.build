@@ -10,7 +10,7 @@
   -->
   <loadfile file="signinfo.txt" property="signinfo" failonerror="false" />
 
-  <property name="solutionname" value="grepWin.sln"/>
+  <property name="solutionname" value="grepWin.slnx"/>
 
   <!-- ====================================================================== -->
   <!-- Configuration targets                                                  -->

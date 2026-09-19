@@ -94,6 +94,8 @@
 #define IDS_REGEXEXCEPTION              179
 #define IDS_COLUMN                      180
 #define IDS_FILTER_CUE                  181
+#define IDS_ERR_WHOLEWORDNOTPOSSIBLE    182
+#define IDS_ERR_INVALID_TEXT            183
 #define IDC_SEARCHTEXT                  1000
 #define IDC_REGEXRADIO                  1001
 #define IDC_TEXTRADIO                   1002

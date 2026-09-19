@@ -6,12 +6,12 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: grepWin\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 1900-01-01 00:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: 비너스걸-VenusGirl💋 <venusgirl@outlook.com>\n"
-"Language-Team: VᴇɴᴜsGɪʀʟ <https://venusgirls.tistory.com/>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,8 +39,8 @@ msgid "%ld more matches"
 msgstr "%ld개 더 많은 일치"
 
 #. Resource IDs: (1069)
-msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset"
-msgstr "%path%는 파일 경로로, %line%은 이동하려는 줄로, %column%은 줄 내 오프셋으로 대체됩니다"
+msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset, %pattern% with the search pattern"
+msgstr "%path%는 파일 경로로, %line%는 점프할 줄로, %column%는 들여쓰기 오프셋으로, %pattern%는 검색 패턴으로 대체됩니다"
 
 #. Resource IDs: (175)
 #, c-format
@@ -297,6 +297,10 @@ msgstr "시스템 항목 포함"
 msgid "Invalid path!"
 msgstr "잘못된 경로!"
 
+#. Resource IDs: (183)
+msgid "Invalid search text"
+msgstr ""
+
 #. Resource IDs: (161)
 msgid "Inverse search"
 msgstr "역방향 검색"
@@ -477,6 +481,10 @@ msgstr "검색 결과"
 #. Resource IDs: (105)
 msgid "Search string"
 msgstr "검색 문자열"
+
+#. Resource IDs: (182)
+msgid "Search string contains non-word characters, a \"whole word\" search is not possible!"
+msgstr ""
 
 #. Resource IDs: (128)
 #, c-format

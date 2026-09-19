@@ -1,6 +1,6 @@
 // grepWin - regex search and replace for Windows
 
-// Copyright (C) 2007-2025 - Stefan Kueng
+// Copyright (C) 2007-2026 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -82,7 +82,28 @@ namespace
 constexpr auto SearchEditSubclassID = 4321;
 std::wstring   g_utf8ReplaceWarningShownForSearchPath;
 
-void           drawRedEditBox(HWND hWnd, WPARAM wParam)
+// Theme-aware color helper
+struct ThemeColors
+{
+    static COLORREF GetInvalidBorderColor(bool isDark)
+    {
+        return isDark ? RGB(200, 60, 60)  // Darker red for dark theme
+                      : RGB(236, 93, 93); // Bright red for light theme
+    }
+
+    static COLORREF GetHighlightColor(bool isDark)
+    {
+        return isDark ? RGB(180, 180, 50) // Muted yellow for dark theme
+                      : RGB(255, 255, 0); // Bright yellow for light theme
+    }
+
+    static BYTE GetHighlightAlpha(bool isDark)
+    {
+        return isDark ? 120 : 92; // More opaque in dark mode (47% vs 36%)
+    }
+};
+
+void drawRedEditBox(HWND hWnd, WPARAM wParam, bool isDark)
 {
     // make the border of the edit control red in case
     // the regex is invalid
@@ -94,7 +115,7 @@ void           drawRedEditBox(HWND hWnd, WPARAM wParam)
     RECT rc = {};
     GetWindowRect(hWnd, &rc);
     MapWindowPoints(nullptr, hWnd, reinterpret_cast<LPPOINT>(&rc), 2);
-    ::SetBkColor(hdc, RGB(236, 93, 93));
+    ::SetBkColor(hdc, ThemeColors::GetInvalidBorderColor(isDark));
     ::ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, nullptr, 0, nullptr);
     ReleaseDC(hWnd, hdc);
 }
@@ -108,7 +129,7 @@ LRESULT CALLBACK SearchPathWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             auto searchDlg = reinterpret_cast<CSearchDlg*>(dwRefData);
             if (!searchDlg->isSearchPathValid())
             {
-                drawRedEditBox(hWnd, wParam);
+                drawRedEditBox(hWnd, wParam, searchDlg->GetDarkModeState());
                 return 0;
             }
         }
@@ -128,7 +149,7 @@ LRESULT CALLBACK SearchEditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             auto searchDlg = reinterpret_cast<CSearchDlg*>(dwRefData);
             if (!searchDlg->isSearchValid())
             {
-                drawRedEditBox(hWnd, wParam);
+                drawRedEditBox(hWnd, wParam, searchDlg->GetDarkModeState());
                 return 0;
             }
         }
@@ -148,7 +169,7 @@ LRESULT CALLBACK ExcludeDirEditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
             auto searchDlg = reinterpret_cast<CSearchDlg*>(dwRefData);
             if (!searchDlg->isExcludeDirsRegexValid())
             {
-                drawRedEditBox(hWnd, wParam);
+                drawRedEditBox(hWnd, wParam, searchDlg->GetDarkModeState());
                 return 0;
             }
         }
@@ -168,7 +189,7 @@ LRESULT CALLBACK FileNameMatchEditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
             auto searchDlg = reinterpret_cast<CSearchDlg*>(dwRefData);
             if (!searchDlg->isFileNameMatchRegexValid())
             {
-                drawRedEditBox(hWnd, wParam);
+                drawRedEditBox(hWnd, wParam, searchDlg->GetDarkModeState());
                 return 0;
             }
         }
@@ -336,6 +357,7 @@ CSearchDlg::CSearchDlg(HWND hParent)
     , m_bExcludeDirsRegexValid(true)
     , m_bFileNameMatchingRegexValid(true)
     , m_themeCallbackId(0)
+    , m_isDarkMode(false)
     , m_pDropTarget(nullptr)
     , m_autoCompleteFilePatterns(bPortable ? &g_iniFile : nullptr)
     , m_autoCompleteExcludeDirsPatterns(bPortable ? &g_iniFile : nullptr)
@@ -381,6 +403,12 @@ CSearchDlg::~CSearchDlg()
 {
 }
 
+void CSearchDlg::SetShowContent()
+{
+    m_showContent    = true;
+    m_showContentSet = true;
+}
+
 bool CSearchDlg::isSearchPathValid() const
 {
     return m_bSearchPathValid;
@@ -400,6 +428,11 @@ bool CSearchDlg::isExcludeDirsRegexValid() const
 bool CSearchDlg::isFileNameMatchRegexValid() const
 {
     return m_bFileNameMatchingRegexValid;
+}
+
+bool CSearchDlg::GetDarkModeState() const
+{
+    return m_isDarkMode;
 }
 
 void CSearchDlg::SetSearchModeUI(bool isTextMode)
@@ -441,13 +474,24 @@ LRESULT CSearchDlg::DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 
             m_themeCallbackId = CTheme::Instance().RegisterThemeChangeCallback(
                 [this]() {
-                    auto bDark = CTheme::Instance().IsDarkTheme();
+                    auto bDark   = CTheme::Instance().IsDarkTheme();
+                    m_isDarkMode = bDark; // Store dark mode state
                     DarkModeHelper::Instance().AllowDarkModeForApp(bDark);
                     CTheme::Instance().SetThemeForDialog(*this, bDark);
                     DarkModeHelper::Instance().AllowDarkModeForWindow(GetToolTipHWND(), bDark);
                     DarkModeHelper::Instance().RefreshTitleBarThemeColor(*this, bDark);
+
+                    // Update size grip for theme
+                    m_resizer.UseSizeGrip(!bDark);
+
+                    // Reapply Mica backdrop (it adapts to theme automatically)
+                    DarkModeHelper::ApplyMicaBackdrop(*this);
+
+                    // Force redraw to update colors
+                    InvalidateRect(*this, nullptr, TRUE);
                 });
-            auto bDark = CTheme::Instance().IsDarkTheme();
+            auto bDark   = CTheme::Instance().IsDarkTheme();
+            m_isDarkMode = bDark; // Initialize dark mode state
             if (bDark)
                 DarkModeHelper::Instance().AllowDarkModeForApp(bDark);
             CTheme::Instance().SetThemeForDialog(*this, CTheme::Instance().IsDarkTheme());
@@ -717,7 +761,7 @@ LRESULT CSearchDlg::DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             AdjustControlSize(IDC_RESULTCONTENT);
 
             m_resizer.Init(hwndDlg);
-            m_resizer.UseSizeGrip(!CTheme::Instance().IsDarkTheme());
+            m_resizer.UseSizeGrip(!m_isDarkMode);
             m_resizer.AddControl(hwndDlg, IDC_HELPLABEL, RESIZER_TOPLEFT);
             m_resizer.AddControl(hwndDlg, IDC_ABOUTLINK, RESIZER_TOPRIGHT);
             m_resizer.AddControl(hwndDlg, IDC_GROUPSEARCHIN, RESIZER_TOPLEFTRIGHT);
@@ -789,6 +833,9 @@ LRESULT CSearchDlg::DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             m_resizer.AddControl(hwndDlg, IDC_RESULTCONTENT, RESIZER_BOTTOMRIGHT);
 
             InitDialog(hwndDlg, IDI_GREPWIN);
+
+            // Apply Windows 11 Mica backdrop effect
+            DarkModeHelper::ApplyMicaBackdrop(*this);
 
             WINDOWPLACEMENT wpl       = {};
             DWORD           size      = sizeof(wpl);
@@ -923,6 +970,10 @@ LRESULT CSearchDlg::DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                             if (!hSplitMenu)
                                 break;
                             OnOutOfScope(DestroyMenu(hSplitMenu));
+
+                            // Enable dark mode for the menu
+                            DarkModeHelper::EnableDarkModeForMenu(*this, m_isDarkMode);
+
                             if (pDropDown->hdr.hwndFrom == GetDlgItem(*this, IDOK))
                             {
                                 auto buf    = GetDlgItemText(IDC_SEARCHPATH);
@@ -1128,6 +1179,28 @@ LRESULT CSearchDlg::DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             }
         }
         break;
+        case WM_SETTINGCHANGE:
+        {
+            // Detect system theme changes (Windows 10 1903+)
+            if (lParam && lstrcmp(reinterpret_cast<LPCWSTR>(lParam), L"ImmersiveColorSet") == 0)
+            {
+                // System theme changed, update our dark mode state
+                m_isDarkMode = CTheme::Instance().IsDarkTheme();
+                DarkModeHelper::Instance().AllowDarkModeForApp(m_isDarkMode);
+                CTheme::Instance().SetThemeForDialog(*this, m_isDarkMode);
+                DarkModeHelper::Instance().RefreshTitleBarThemeColor(*this, m_isDarkMode);
+
+                // Update size grip
+                m_resizer.UseSizeGrip(!m_isDarkMode);
+
+                // Reapply Mica backdrop
+                DarkModeHelper::ApplyMicaBackdrop(*this);
+
+                // Force redraw of all controls
+                InvalidateRect(*this, nullptr, TRUE);
+            }
+        }
+        break;
         case WM_COPYDATA:
         {
             if (lParam)
@@ -1139,11 +1212,29 @@ LRESULT CSearchDlg::DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                     auto buf     = GetDlgItemText(IDC_SEARCHPATH);
                     m_searchPath = buf.get();
 
-                    if (wParam == 1)
-                        m_searchPath.clear();
+                    if (wParam == 1 || m_searchPath.empty())
+                        m_searchPath = newPath;
                     else
-                        m_searchPath += L"|";
-                    m_searchPath += newPath;
+                    {
+                        // Look for duplicates.
+                        bool exists = false;
+                        size_t substrBegin = 0;
+                        for (;;)
+                        {
+                            size_t sepPos = m_searchPath.find(L'|', substrBegin);
+                            exists = m_searchPath.compare(substrBegin, sepPos - substrBegin, newPath) == 0;
+                            if (exists || sepPos == std::wstring::npos)
+                                break;
+                            substrBegin = sepPos + 1;
+                        }
+
+                        if (!exists)
+                        {
+                            // Append to existent paths.
+                            m_searchPath += L'|';
+                            m_searchPath += newPath;
+                        }
+                    }
                     SetDlgItemText(hwndDlg, IDC_SEARCHPATH, m_searchPath.c_str());
                     g_startTime = GetTickCount64();
                 }
@@ -1317,7 +1408,24 @@ LRESULT CSearchDlg::DoCommand(int id, int msg)
                         m_searchPath += item->filePath;
                     }
                 }
-
+                if (!m_bUseRegex && m_bWholeWords)
+                {
+                    // check if the search string contains only word characters, otherwise whole word search is not possible
+                    bool hasOnlyWordChars = true;
+                    for (wchar_t ch : m_searchString)
+                    {
+                        if (!iswalnum(ch) && ch != L'_')
+                        {
+                            hasOnlyWordChars = false;
+                            break;
+                        }
+                    }
+                    if (!hasOnlyWordChars)
+                    {
+                        ShowEditBalloon(IDC_SEARCHTEXT, TranslatedString(hResource, IDS_ERR_INVALID_TEXT).c_str(), TranslatedString(hResource, IDS_ERR_WHOLEWORDNOTPOSSIBLE).c_str());
+                        break;
+                    }
+                }
                 m_searchedItems = 0;
                 m_totalItems    = 0;
 
@@ -2251,6 +2359,10 @@ void CSearchDlg::ShowContextMenu(HWND hWnd, int x, int y)
             if (hMenu)
             {
                 OnOutOfScope(DestroyMenu(hMenu));
+
+                // Enable dark mode for the menu
+                DarkModeHelper::EnableDarkModeForMenu(*this, m_isDarkMode);
+
                 auto sCopyColumn    = TranslatedString(hResource, IDS_COPY_COLUMN);
                 auto sCopyColumnSel = TranslatedString(hResource, IDS_COPY_COLUMN_SEL);
                 AppendMenu(hMenu, MF_STRING, 1, sCopyColumn.c_str());
@@ -2422,7 +2534,7 @@ void CSearchDlg::ShowContextMenu(HWND hWnd, int x, int y)
     {
         vPaths.push_back(*m_items[idx]);
     }
-    shellMenu.SetObjects(std::move(vPaths), std::move(lines));
+    shellMenu.SetObjects(std::move(vPaths), std::move(lines), m_searchString);
 
     if ((x == -1) && (y == -1))
     {
@@ -2737,15 +2849,15 @@ LRESULT CSearchDlg::ColorizeMatchResultProc(LPNMLVCUSTOMDRAW lpLVCD)
                         rc.right = rc.left + width;
                     }
 
-                    width = rc.right - rc.left;
+                    width                 = rc.right - rc.left;
                     LONG          height  = rc.bottom - rc.top;
                     HDC           hcdc    = CreateCompatibleDC(hdc);
                     BITMAPINFO    bmi     = {{sizeof(BITMAPINFOHEADER), width, height, 1, 32, BI_RGB, static_cast<DWORD>(width * height * 4u), 0, 0, 0, 0}, {{0, 0, 0, 0}}};
-                    BLENDFUNCTION blend   = {AC_SRC_OVER, 0, 92, 0}; // 36%
+                    BLENDFUNCTION blend   = {AC_SRC_OVER, 0, ThemeColors::GetHighlightAlpha(m_isDarkMode), 0};
                     HBITMAP       hBitmap = CreateDIBSection(hcdc, &bmi, DIB_RGB_COLORS, nullptr, nullptr, 0x0);
                     auto          oldBmp  = SelectObject(hcdc, hBitmap);
-                    auto          brush   = CreateSolidBrush(RGB(255, 255, 0));
-                    rc2 = {0, 0, width, height};
+                    auto          brush   = CreateSolidBrush(ThemeColors::GetHighlightColor(m_isDarkMode));
+                    rc2                   = {0, 0, width, height};
                     FillRect(hcdc, &rc2, brush);
                     AlphaBlend(hdc, rc.left, rc.top, width, height, hcdc, 0, 0, width, height, blend);
                     SelectObject(hcdc, oldBmp);
@@ -3124,8 +3236,32 @@ LRESULT CSearchDlg::DoListNotify(LPNMITEMACTIVATE lpNMItemActivate)
                         }
                         break;
                         case 4: // path
-                            wcsncpy_s(pItem->pszText, pItem->cchTextMax, pInfo->filePath.substr(0, pInfo->filePath.size() - pInfo->filePath.substr(pInfo->filePath.find_last_of('\\') + 1).size() - 1).c_str(), pItem->cchTextMax - 1LL);
-                            break;
+                        {
+                            std::wstring pathToDisplay;
+                            if (m_searchPath.find('|') != std::wstring::npos)
+                            {
+                                // Show full path in case of multiple search paths
+                                pathToDisplay = pInfo->filePath.substr(0, pInfo->filePath.size() - pInfo->filePath.substr(pInfo->filePath.find_last_of('\\') + 1).size() - 1);
+                            }
+                            else
+                            {
+                                // Relative path
+                                auto filePart = pInfo->filePath.substr(pInfo->filePath.find_last_of('\\'));
+                                auto len      = pInfo->filePath.size() - m_searchPath.size() - filePart.size();
+                                if (len > 0)
+                                    --len;
+                                if (m_searchPath.size() < pInfo->filePath.size())
+                                {
+                                    pathToDisplay = pInfo->filePath.substr(m_searchPath.size() + 1, len);
+                                    if (pathToDisplay.empty())
+                                        pathToDisplay = L"\\.";
+                                }
+                                else
+                                    pathToDisplay = pInfo->filePath;
+                            }
+                            wcsncpy_s(pItem->pszText, pItem->cchTextMax, pathToDisplay.c_str(), pItem->cchTextMax - 1LL);
+                        }
+                        break;
                         default:
                             pItem->pszText[0] = 0;
                             break;
@@ -3254,6 +3390,7 @@ void CSearchDlg::OpenFileAtListIndex(int listIndex)
         {
             SearchReplace(cmd, L"%line%", line);
             SearchReplace(cmd, L"%column%", move);
+            SearchReplace(cmd, L"%pattern%", pInfo->searchPattern);
             SearchReplace(cmd, L"%path%", pInfo->filePath);
             OpenFileInProcess(const_cast<wchar_t*>(cmd.c_str()));
             return;
@@ -3801,7 +3938,8 @@ DWORD CSearchDlg::SearchThread()
                     auto searchFn = [=]() {
                         SearchFile(sInfo, searchRoot);
                     };
-                    tp.enqueueWait(searchFn);
+                    searchFn();
+                    // tp.enqueueWait(searchFn);
                 }
             }
             else if (!bIsDirectory || (bCountingOnly && m_patternRegex.empty()))
@@ -4352,11 +4490,32 @@ std::basic_string<char> ConvertToString<char>(const std::wstring& str, CTextFile
     switch (encoding)
     {
         case CTextFile::Unicode_Le:
-            return std::basic_string<char>(reinterpret_cast<const char*>(str.c_str()), 2 * str.length());
         case CTextFile::Unicode_Be:
         {
-            std::wstring strBe = utf16Swap(str);
-            return std::basic_string<char>(reinterpret_cast<const char*>(strBe.c_str()), 2 * strBe.length());
+            std::string strLe;
+            bool        lastWasBackslash = false;
+            for (const auto& ch : str)
+            {
+                if (lastWasBackslash)
+                    strLe += CUnicodeUtils::StdGetUTF8(std::wstring(1, ch));
+                else
+                {
+                    if (ch == '\\')
+                        strLe += '\\';
+                    else if (encoding == CTextFile::Unicode_Be)
+                    {
+                        strLe += static_cast<char>(ch & 0xFF);
+                        strLe += static_cast<char>((ch >> 8) & 0xFF);
+                    }
+                    else
+                    {
+                        strLe += static_cast<char>((ch >> 8) & 0xFF);
+                        strLe += static_cast<char>(ch & 0xFF);
+                    }
+                }
+                lastWasBackslash = (ch == '\\');
+            }
+            return strLe;
         }
         case CTextFile::Ansi:
             return CUnicodeUtils::StdGetANSI(str);
@@ -4781,6 +4940,7 @@ void CSearchDlg::SearchFile(CSearchInfo sInfo, const std::wstring& searchRoot)
         // sInfo.encoding = type; // show the matched encoding
     }
 
+    sInfo.searchPattern = m_searchString;
     SendResult(sInfo, nCount);
 }
 
@@ -5119,7 +5279,7 @@ void CSearchDlg::doFilter()
     filterItemsList(filterText.get());
     ShowWindow(GetDlgItem(*this, IDC_EXPORT), m_items.empty() ? SW_HIDE : SW_SHOW);
     bool fileList = (IsDlgButtonChecked(*this, IDC_RESULTFILES) == BST_CHECKED);
-    ListView_SetItemCountEx(hListControl, fileList ? m_items.size() : m_listItems.size(), LVSICF_NOINVALIDATEALL | LVSICF_NOSCROLL);
+    ListView_SetItemCountEx(hListControl, fileList ? m_items.size() : m_listItems.size(), LVSICF_NOSCROLL);
     SendMessage(hListControl, WM_SETREDRAW, TRUE, 0);
     RedrawWindow(hListControl, nullptr, nullptr, RDW_ERASE | RDW_FRAME | RDW_INVALIDATE | RDW_ALLCHILDREN);
 }

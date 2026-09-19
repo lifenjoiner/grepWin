@@ -39,8 +39,8 @@ msgid "%ld more matches"
 msgstr "%ld ज्यादा मिलान नतीजे"
 
 #. Resource IDs: (1069)
-msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset"
-msgstr ""
+msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset, %pattern% with the search pattern"
+msgstr "%path% = फ़ाइल पथ, %line% = पंक्ति, %column% = पंक्ति में स्थान, %pattern% सर्च पैटर्न के साथ"
 
 #. Resource IDs: (175)
 #, c-format
@@ -53,7 +53,7 @@ msgstr "grepWin परिचय (&A)..."
 
 #. Resource IDs: (1061)
 msgid "&Convert newlines"
-msgstr ""
+msgstr "नई पंक्तियाँ बदलें (&C)"
 
 #. Resource IDs: (1049)
 msgid "&Replace"
@@ -61,7 +61,7 @@ msgstr "बदलें (&R)"
 
 #. Resource IDs: (1003)
 msgid "&Whole word"
-msgstr ""
+msgstr "पूरा शब्द (&W)"
 
 #. Resource IDs: (1013)
 msgid "..."
@@ -114,11 +114,11 @@ msgstr "बीच में"
 
 #. Resource IDs: (1095)
 msgid "Both"
-msgstr ""
+msgstr "दोनों"
 
 #. Resource IDs: (1093)
 msgid "CRLF (Windows)"
-msgstr ""
+msgstr "CRLF (Windows)"
 
 #. Resource IDs: (2)
 msgid "Cancel"
@@ -126,7 +126,7 @@ msgstr "रद्द करें"
 
 #. Resource IDs: (169)
 msgid "Capture search (Shows replaced text)"
-msgstr ""
+msgstr "कैप्चर खोज (बदला हुआ पाठ दिखाए)"
 
 #. Resource IDs: (1088)
 msgid "Check for updates"
@@ -134,11 +134,11 @@ msgstr "अद्यतन जांच"
 
 #. Resource IDs: (180)
 msgid "Column"
-msgstr ""
+msgstr "स्तंभ"
 
 #. Resource IDs: (1068)
 msgid "Command line to start an editor at a specific line and in line offset:"
-msgstr ""
+msgstr "संपादक को निश्चित पंक्ति पर खोलने की कमांड:"
 
 #. Resource IDs: (1060)
 msgid "Content"
@@ -146,15 +146,15 @@ msgstr "विषयसूची"
 
 #. Resource IDs: (65535)
 msgid "Convert newlines to regex newline tags:"
-msgstr ""
+msgstr "नई पंक्तियों को regex टैग में बदलें:"
 
 #. Resource IDs: (177)
 msgid "Copy column for all items"
-msgstr ""
+msgstr "सभी आइटम के लिए कॉलम कॉपी करें"
 
 #. Resource IDs: (178)
 msgid "Copy column for selected items"
-msgstr ""
+msgstr "चुने आइटम के लिए कॉलम कॉपी करें"
 
 #. Resource IDs: (145)
 msgid "Copy filename to clipboard"
@@ -254,12 +254,12 @@ msgstr "फ़ाइलें"
 
 #. Resource IDs: (181)
 msgid "Filter results"
-msgstr ""
+msgstr "परिणाम फ़िल्टर करें"
 
 #. Resource IDs: (174)
 #, c-format
 msgid "Found %s files, skipped %s files."
-msgstr ""
+msgstr "मिले %s फ़ाइलें, छोड़ी %s फ़ाइलें।"
 
 #. Resource IDs: (109)
 msgid "GREPWIN"
@@ -287,7 +287,7 @@ msgstr "अंदर के फ़ोल्डर शामिल करें"
 
 #. Resource IDs: (1092)
 msgid "Include symbolic links"
-msgstr ""
+msgstr "प्रतीकात्मक लिंक शामिल करें"
 
 #. Resource IDs: (1009)
 msgid "Include system items"
@@ -297,9 +297,13 @@ msgstr "सिस्टम आइटम्स शामिल करें"
 msgid "Invalid path!"
 msgstr "अवैध पथ!"
 
+#. Resource IDs: (183)
+msgid "Invalid search text"
+msgstr ""
+
 #. Resource IDs: (161)
 msgid "Inverse search"
-msgstr ""
+msgstr "उलटी खोज"
 
 #. Resource IDs: (1019)
 msgid "KB"
@@ -307,11 +311,11 @@ msgstr "KB"
 
 #. Resource IDs: (1062)
 msgid "Keep file date when replacing"
-msgstr ""
+msgstr "बदलते समय फ़ाइल की दिनांक रखें"
 
 #. Resource IDs: (1094)
 msgid "LF (Linux)"
-msgstr ""
+msgstr "LF (Linux)"
 
 #. Resource IDs: (1075)
 msgid "Language:"
@@ -328,7 +332,7 @@ msgstr "रेखा"
 #. Resource IDs: (150)
 #, c-format
 msgid "Line %5ld : %s\n"
-msgstr ""
+msgstr "पंक्ति %5ld : %s\n"
 
 #. Resource IDs: (135)
 msgid "Matches"
@@ -336,7 +340,7 @@ msgstr "मिलान नतीजे"
 
 #. Resource IDs: (137)
 msgid "Multiline editor"
-msgstr ""
+msgstr "बहु-पंक्ति संपादक"
 
 #. Resource IDs: (104)
 msgid "Name"
@@ -352,11 +356,11 @@ msgstr "Newline '.' से मेल करती है"
 
 #. Resource IDs: (140)
 msgid "Newlines"
-msgstr ""
+msgstr "नई पंक्तियाँ"
 
 #. Resource IDs: (1056)
 msgid "Note: newlines in the text are ignored, used for formatting only. To convert the formatting newlines to proper regex newlines use the button below."
-msgstr ""
+msgstr "नोट: पाठ में नई पंक्तियाँ नज़रअंदाज़ की जाती हैं। नीचे का बटन उपयोग करें।"
 
 #. Resource IDs: (1)
 msgid "OK"
@@ -428,7 +432,7 @@ msgstr "Regex खोज स्ट्रिंग:"
 
 #. Resource IDs: (179)
 msgid "Regex stack error"
-msgstr ""
+msgstr "Regex स्टैक त्रुटि"
 
 #. Resource IDs: (152)
 msgid "Relative paths are not allowed. Please enter an absolute path!"
@@ -478,6 +482,10 @@ msgstr "खोज नतीजे"
 msgid "Search string"
 msgstr "खोज स्ट्रिंग"
 
+#. Resource IDs: (182)
+msgid "Search string contains non-word characters, a \"whole word\" search is not possible!"
+msgstr ""
+
 #. Resource IDs: (128)
 #, c-format
 msgid "Searched %s files, skipped %s files. Found %s matches in %s files."
@@ -523,7 +531,7 @@ msgstr "टेक्स्ट खोज"
 #. Resource IDs: (160)
 #, c-format
 msgid "The path \"%s\" does not exist or is not accessible!"
-msgstr ""
+msgstr "पथ \"%s\" मौजूद नहीं या पहुँच योग्य नहीं!"
 
 #. Resource IDs: (65535)
 msgid "The regex search string matches:"
@@ -544,11 +552,11 @@ msgstr "फ़ाइलों को binary जैसा बरतें"
 #. Resource IDs: (172)
 #, c-format
 msgid "You have the option \"%s\" enabled.\r\nWhen replacing, this option can lead to corrupted files.\r\nDo you want to proceed anyway?"
-msgstr ""
+msgstr "विकल्प \"%s\" सक्षम है।\r\nबदलने पर फ़ाइलें खराब हो सकती हैं।\r\nफिर भी जारी रखें?"
 
 #. Resource IDs: (1025)
 msgid "\\"
-msgstr ""
+msgstr "\\"
 
 #. Resource IDs: (116)
 msgid "a regular expression used for searching. Press F1 for more info."
@@ -633,11 +641,11 @@ msgstr "फ़ाइल को binary के बजाए टेक्स्ट म
 
 #. Resource IDs: (112)
 msgid "only files that match this pattern are searched.\r\nText match extended. Use \"|\" as the delimiter.\r\nExample: *.cpp|*.h"
-msgstr ""
+msgstr "केवल इस पैटर्न से मेल खाती फ़ाइलें खोजी जाती हैं।\r\n\"|\" का उपयोग विभाजक के रूप में करें।\r\nउदाहरण: *.cpp|*.h"
 
 #. Resource IDs: (176)
 msgid "open list with recent entries"
-msgstr ""
+msgstr "हाल की प्रविष्टियों की सूची खोलें"
 
 #. Resource IDs: (129)
 msgid "read error"
@@ -674,7 +682,7 @@ msgstr "आप निदेशिका बाहर रख सकते है�
 
 #. Resource IDs: (1064, 1066, 1067)
 msgid "|"
-msgstr ""
+msgstr "|"
 
 #. Resource IDs: (1024)
 msgid "⑂"

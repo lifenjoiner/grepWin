@@ -39,8 +39,8 @@ msgid "%ld more matches"
 msgstr "%ld mehr Übereinstimmungen"
 
 #. Resource IDs: (1069)
-msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset"
-msgstr "%path% witd mit dem Pfad der Datei ersetzt, %line% mit der Zeile, %column% mit der Spalte in der Zeile"
+msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset, %pattern% with the search pattern"
+msgstr "%path% wird mit dem Pfad der Datei ersetzt, %line% mit der Zeile, %column% mit der Spalte in der Zeile, %pattern% mit dem Suchmuster"
 
 #. Resource IDs: (175)
 #, c-format
@@ -297,6 +297,10 @@ msgstr "System-Dateien"
 msgid "Invalid path!"
 msgstr "Pfad ungültig!"
 
+#. Resource IDs: (183)
+msgid "Invalid search text"
+msgstr "Ungültiger Suchtext"
+
 #. Resource IDs: (161)
 msgid "Inverse search"
 msgstr "Umgekehrte Suche"
@@ -477,6 +481,10 @@ msgstr "Suchresultate"
 #. Resource IDs: (105)
 msgid "Search string"
 msgstr "Suchstring"
+
+#. Resource IDs: (182)
+msgid "Search string contains non-word characters, a \"whole word\" search is not possible!"
+msgstr "Suchstring enthält Nicht-Wort-Zeichen, eine \"Ganzes Wort\"-Suche ist nicht möglich!"
 
 #. Resource IDs: (128)
 #, c-format

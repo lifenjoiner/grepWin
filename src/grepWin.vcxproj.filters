@@ -332,6 +332,11 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="..\.github\workflows\msbuild.yml">
+      <Filter>Scripts</Filter>
+    </None>
+    <None Include="..\vcpkg.json" />
+    <None Include="..\vcpkg-configuration.json" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resources\grepWin.rc">

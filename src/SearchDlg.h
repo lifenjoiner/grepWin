@@ -1,6 +1,6 @@
 // grepWin - regex search and replace for Windows
 
-// Copyright (C) 2007-2024 - Stefan Kueng
+// Copyright (C) 2007-2024, 2026 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -89,15 +89,12 @@ public:
 
     void  SetExecute(ExecuteAction execute) { m_executeImmediately = execute; }
     void  SetEndDialog() { m_endDialog = true; }
-    void  SetShowContent()
-    {
-        m_showContent    = true;
-        m_showContentSet = true;
-    }
-    bool isSearchPathValid() const;
-    bool isSearchValid() const;
-    bool isExcludeDirsRegexValid() const;
-    bool isFileNameMatchRegexValid() const;
+    void  SetShowContent();
+    bool  isSearchPathValid() const;
+    bool  isSearchValid() const;
+    bool  isExcludeDirsRegexValid() const;
+    bool  isFileNameMatchRegexValid() const;
+    bool  GetDarkModeState() const;
 
 protected:
     LRESULT CALLBACK DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) override;
@@ -226,6 +223,7 @@ private:
 
     CDlgResizer                      m_resizer;
     int                              m_themeCallbackId;
+    bool                             m_isDarkMode;
 
     std::unique_ptr<CFileDropTarget> m_pDropTarget;
 

@@ -39,13 +39,13 @@ msgid "%ld more matches"
 msgstr "... %ld więcej dopasowań"
 
 #. Resource IDs: (1069)
-msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset"
-msgstr ""
+msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset, %pattern% with the search pattern"
+msgstr "%path% = ścieżka pliku, %line% = wiersz, %column% = pozycja w wierszu, %pattern% ze wzorcem wyszukiwania"
 
 #. Resource IDs: (175)
 #, c-format
 msgid "%s files, skipped %s files. %s results selected."
-msgstr "Plików: %s, pominięto plików: %s. %s results selected."
+msgstr "Plików: %s, pominięto plików: %s. Wybranych %s wyników."
 
 #. Resource IDs: (119)
 msgid "&About grepWin..."
@@ -53,7 +53,7 @@ msgstr "&O grepWin..."
 
 #. Resource IDs: (1061)
 msgid "&Convert newlines"
-msgstr ""
+msgstr "&Konwertuj znak końca linii"
 
 #. Resource IDs: (1049)
 msgid "&Replace"
@@ -114,11 +114,11 @@ msgstr "Pomiędzy"
 
 #. Resource IDs: (1095)
 msgid "Both"
-msgstr ""
+msgstr "Oba"
 
 #. Resource IDs: (1093)
 msgid "CRLF (Windows)"
-msgstr ""
+msgstr "CRLF (Windows)"
 
 #. Resource IDs: (2)
 msgid "Cancel"
@@ -126,7 +126,7 @@ msgstr "Anuluj"
 
 #. Resource IDs: (169)
 msgid "Capture search (Shows replaced text)"
-msgstr ""
+msgstr "Wyszukiwanie z przechwytywaniem (pokazuje zastąpiony tekst)"
 
 #. Resource IDs: (1088)
 msgid "Check for updates"
@@ -134,11 +134,11 @@ msgstr "Sprawdź aktualizacje"
 
 #. Resource IDs: (180)
 msgid "Column"
-msgstr ""
+msgstr "Kolumna"
 
 #. Resource IDs: (1068)
 msgid "Command line to start an editor at a specific line and in line offset:"
-msgstr ""
+msgstr "Polecenie do uruchomienia edytora w określonej linii i kolumnie"
 
 #. Resource IDs: (1060)
 msgid "Content"
@@ -146,15 +146,15 @@ msgstr "Zawartość"
 
 #. Resource IDs: (65535)
 msgid "Convert newlines to regex newline tags:"
-msgstr ""
+msgstr "Konwertuj znaki końca linii na znaczniki RegEx"
 
 #. Resource IDs: (177)
 msgid "Copy column for all items"
-msgstr ""
+msgstr "Kopiuj kolumnę dla wszystkich elementów"
 
 #. Resource IDs: (178)
 msgid "Copy column for selected items"
-msgstr ""
+msgstr "Kopiuj kolumnę dla wybranych elementów"
 
 #. Resource IDs: (145)
 msgid "Copy filename to clipboard"
@@ -254,7 +254,7 @@ msgstr "Pliki"
 
 #. Resource IDs: (181)
 msgid "Filter results"
-msgstr ""
+msgstr "Wyniki filtrowania"
 
 #. Resource IDs: (174)
 #, c-format
@@ -287,7 +287,7 @@ msgstr "Uwzględnij podfoldery"
 
 #. Resource IDs: (1092)
 msgid "Include symbolic links"
-msgstr ""
+msgstr "Dołącz linki symboliczne"
 
 #. Resource IDs: (1009)
 msgid "Include system items"
@@ -297,9 +297,13 @@ msgstr "Uwzględnij systemowe"
 msgid "Invalid path!"
 msgstr "Niewłaściwa ścieżka!"
 
+#. Resource IDs: (183)
+msgid "Invalid search text"
+msgstr "Nieprawidłowy tekst wyszukiwania"
+
 #. Resource IDs: (161)
 msgid "Inverse search"
-msgstr ""
+msgstr "Wyszukiwanie odwrotne"
 
 #. Resource IDs: (1019)
 msgid "KB"
@@ -307,11 +311,11 @@ msgstr "KB"
 
 #. Resource IDs: (1062)
 msgid "Keep file date when replacing"
-msgstr ""
+msgstr "Zachowaj datę pliku podczas zamiany"
 
 #. Resource IDs: (1094)
 msgid "LF (Linux)"
-msgstr ""
+msgstr "LF (Linux)"
 
 #. Resource IDs: (1075)
 msgid "Language:"
@@ -328,7 +332,7 @@ msgstr "Linia"
 #. Resource IDs: (150)
 #, c-format
 msgid "Line %5ld : %s\n"
-msgstr ""
+msgstr "Linia %5ld : %s\n"
 
 #. Resource IDs: (135)
 msgid "Matches"
@@ -336,7 +340,7 @@ msgstr "Dopasowania"
 
 #. Resource IDs: (137)
 msgid "Multiline editor"
-msgstr ""
+msgstr "Edytor wielowierszowy"
 
 #. Resource IDs: (104)
 msgid "Name"
@@ -352,11 +356,11 @@ msgstr "Nowa linia jest dopasowana przez '.'"
 
 #. Resource IDs: (140)
 msgid "Newlines"
-msgstr ""
+msgstr "Nowe linie"
 
 #. Resource IDs: (1056)
 msgid "Note: newlines in the text are ignored, used for formatting only. To convert the formatting newlines to proper regex newlines use the button below."
-msgstr ""
+msgstr "Uwaga: znaki nowej linii w tekście są ignorowane i służą wyłącznie do formatowania. Aby przekonwertować nowe linie formatowania na poprawne nowe linie wyrażeń regularnych, użyj poniższego przycisku."
 
 #. Resource IDs: (1)
 msgid "OK"
@@ -428,7 +432,7 @@ msgstr "Ciąg wyszukiwania Regex:"
 
 #. Resource IDs: (179)
 msgid "Regex stack error"
-msgstr ""
+msgstr "Regex błąd stosu"
 
 #. Resource IDs: (152)
 msgid "Relative paths are not allowed. Please enter an absolute path!"
@@ -478,6 +482,10 @@ msgstr "Wyniki wyszukiwania"
 msgid "Search string"
 msgstr "Szukana fraza"
 
+#. Resource IDs: (182)
+msgid "Search string contains non-word characters, a \"whole word\" search is not possible!"
+msgstr "Ciąg wyszukiwania zawiera znaki niebędące słowami, więc wyszukiwanie \"całych słów\" nie jest możliwe!"
+
 #. Resource IDs: (128)
 #, c-format
 msgid "Searched %s files, skipped %s files. Found %s matches in %s files."
@@ -486,7 +494,7 @@ msgstr "Wyszukano plików: %s, pominięto plików: %s. Znaleziono %s dopasowań 
 #. Resource IDs: (173)
 #, c-format
 msgid "Searched %s files, skipped %s files. Found %s matches in %s files. %s results selected."
-msgstr "Wyszukano plików: %s, pominięto plików: %s. Znaleziono %s dopasowań w %s plikach. %s results selected."
+msgstr "Wyszukano plików: %s, pominięto plików: %s. Znaleziono %s dopasowań w %s plikach. %s wyników wybranych."
 
 #. Resource IDs: (140)
 msgid "Select Editor Application..."
@@ -523,7 +531,7 @@ msgstr "Wyszukiwanie tekstu"
 #. Resource IDs: (160)
 #, c-format
 msgid "The path \"%s\" does not exist or is not accessible!"
-msgstr ""
+msgstr "Ścieżka \"%s\" nie istnieje lub nie jest dostępna!"
 
 #. Resource IDs: (65535)
 msgid "The regex search string matches:"
@@ -544,11 +552,11 @@ msgstr "Traktuj pliki jako binarne"
 #. Resource IDs: (172)
 #, c-format
 msgid "You have the option \"%s\" enabled.\r\nWhen replacing, this option can lead to corrupted files.\r\nDo you want to proceed anyway?"
-msgstr ""
+msgstr "Masz włączoną opcję \"%s\".\r\nPodczas zamiany ta opcja może spowodować uszkodzenie plików.\r\nCzy mimo to chcesz kontynuować?"
 
 #. Resource IDs: (1025)
 msgid "\\"
-msgstr ""
+msgstr "\\"
 
 #. Resource IDs: (116)
 msgid "a regular expression used for searching. Press F1 for more info."
@@ -605,7 +613,7 @@ msgstr "uwzględnij pasujące numery linii"
 
 #. Resource IDs: (167)
 msgid "include match line text"
-msgstr "uwzględniu pasujący tekst linii"
+msgstr "uwzględnij pasujący tekst linii"
 
 #. Resource IDs: (132)
 msgid "invalid regex!"
@@ -633,11 +641,11 @@ msgstr "ilość znakó/bajtów NULL na każdy MB pozwalający nadal uznać plik 
 
 #. Resource IDs: (112)
 msgid "only files that match this pattern are searched.\r\nText match extended. Use \"|\" as the delimiter.\r\nExample: *.cpp|*.h"
-msgstr ""
+msgstr "Przeszukiwane są tylko pliki pasujące do tego wzorca.\r\nRozszerzone dopasowanie tekstu. Użyj \"|\" jako separatora.\r\nPrzykład: *.cpp|*.h"
 
 #. Resource IDs: (176)
 msgid "open list with recent entries"
-msgstr ""
+msgstr "otwórz listę z ostatnimi wpisami"
 
 #. Resource IDs: (129)
 msgid "read error"
@@ -674,7 +682,7 @@ msgstr "Można wykluczyć katalogi, np. CVS i obrazy.\r\nPrzykład: ^(CVS|obrazy
 
 #. Resource IDs: (1064, 1066, 1067)
 msgid "|"
-msgstr ""
+msgstr "|"
 
 #. Resource IDs: (1024)
 msgid "⑂"

@@ -39,8 +39,8 @@ msgid "%ld more matches"
 msgstr "%ld meer overeenkomsten"
 
 #. Resource IDs: (1069)
-msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset"
-msgstr "%path% wordt vervangen door het pad van het bestand, %line% met de lijn om naar te springen, %column% met regelverschuiving"
+msgid "%path% is replaced with the path of the file, %line% with the line to jump to, %column% with in line offset, %pattern% with the search pattern"
+msgstr "%path% wordt vervangen door het pad van het bestand, %line% met de regel om naar te springen, %column% met positie in de regel, %pattern% met het zoekpatroon"
 
 #. Resource IDs: (175)
 #, c-format
@@ -53,7 +53,7 @@ msgstr "&Over grepWin..."
 
 #. Resource IDs: (1061)
 msgid "&Convert newlines"
-msgstr ""
+msgstr "Newlines &converteren"
 
 #. Resource IDs: (1049)
 msgid "&Replace"
@@ -114,11 +114,11 @@ msgstr "Tussen"
 
 #. Resource IDs: (1095)
 msgid "Both"
-msgstr ""
+msgstr "Beide"
 
 #. Resource IDs: (1093)
 msgid "CRLF (Windows)"
-msgstr ""
+msgstr "CRLF (Windows)"
 
 #. Resource IDs: (2)
 msgid "Cancel"
@@ -146,7 +146,7 @@ msgstr "Inhoud"
 
 #. Resource IDs: (65535)
 msgid "Convert newlines to regex newline tags:"
-msgstr ""
+msgstr "Nieuwe regels omzetten naar regex newline tags:"
 
 #. Resource IDs: (177)
 msgid "Copy column for all items"
@@ -254,7 +254,7 @@ msgstr "Bestanden"
 
 #. Resource IDs: (181)
 msgid "Filter results"
-msgstr ""
+msgstr "Resultaten filteren"
 
 #. Resource IDs: (174)
 #, c-format
@@ -297,6 +297,10 @@ msgstr "Inclusief systeembestanden"
 msgid "Invalid path!"
 msgstr "Ongeldig pad!"
 
+#. Resource IDs: (183)
+msgid "Invalid search text"
+msgstr ""
+
 #. Resource IDs: (161)
 msgid "Inverse search"
 msgstr "Omgekeerde zoekrichting"
@@ -311,7 +315,7 @@ msgstr "Bestandsdatum behouden"
 
 #. Resource IDs: (1094)
 msgid "LF (Linux)"
-msgstr ""
+msgstr "LF (Linux)"
 
 #. Resource IDs: (1075)
 msgid "Language:"
@@ -336,7 +340,7 @@ msgstr "Komt overeen met"
 
 #. Resource IDs: (137)
 msgid "Multiline editor"
-msgstr ""
+msgstr "Multiline editor"
 
 #. Resource IDs: (104)
 msgid "Name"
@@ -352,11 +356,11 @@ msgstr "Regeleinde komt overeen met '.'"
 
 #. Resource IDs: (140)
 msgid "Newlines"
-msgstr ""
+msgstr "Newlines"
 
 #. Resource IDs: (1056)
 msgid "Note: newlines in the text are ignored, used for formatting only. To convert the formatting newlines to proper regex newlines use the button below."
-msgstr ""
+msgstr "Opmerking: nieuwe regels in de tekst worden genegeerd en worden alleen gebruikt voor opmaak. Om de opmaak van nieuwe regels om te zetten naar de juiste regex-nieuwe regels, gebruikt u de onderstaande knop."
 
 #. Resource IDs: (1)
 msgid "OK"
@@ -478,6 +482,10 @@ msgstr "Zoekresultaat"
 msgid "Search string"
 msgstr "Tekenreeks"
 
+#. Resource IDs: (182)
+msgid "Search string contains non-word characters, a \"whole word\" search is not possible!"
+msgstr ""
+
 #. Resource IDs: (128)
 #, c-format
 msgid "Searched %s files, skipped %s files. Found %s matches in %s files."
@@ -535,7 +543,7 @@ msgstr "Resultaattekst na vervanging:"
 
 #. Resource IDs: (1053)
 msgid "Treat files as UTF8"
-msgstr "Als UTF-8 behandelen"
+msgstr "Als UTF8 behandelen"
 
 #. Resource IDs: (1054)
 msgid "Treat files as binary"
@@ -633,7 +641,7 @@ msgstr "Aantal NULL-bytes per MB waarmee een bestand nog steeds wordt beschouwd 
 
 #. Resource IDs: (112)
 msgid "only files that match this pattern are searched.\r\nText match extended. Use \"|\" as the delimiter.\r\nExample: *.cpp|*.h"
-msgstr ""
+msgstr "alleen bestanden die overeenkomen met dit patroon worden doorzocht.\r\nUitgebreide tekstovereenkomst. Gebruik \"|\" als scheidingsteken.\r\nBijv.: *.cpp|*.h"
 
 #. Resource IDs: (176)
 msgid "open list with recent entries"

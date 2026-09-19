@@ -39,11 +39,15 @@
     <!-- sign all release binaries -->
     <if test="${file::exists('..\..\signinfo.txt')}">
       <exec program="${signtool}">
+        <arg value="-pin" if="${signtoolpin != ''}" />
+        <arg value="${signtoolpin}" if="${signtoolpin != ''}" />
         <arg value="sign" />
         <arg value="${signinfo}" />
         <arg value="..\..\bin\release\grepWin.exe" />
       </exec>
       <exec program="${signtool}">
+        <arg value="-pin" if="${signtoolpin != ''}" />
+        <arg value="${signtoolpin}" if="${signtoolpin != ''}" />
         <arg value="sign" />
         <arg value="${signinfo}" />
         <arg value="..\..\bin\release64\grepWin.exe" />
@@ -61,6 +65,8 @@
     </exec>
     <if test="${file::exists('..\..\signinfo.txt')}">
       <exec program="${signtool}">
+        <arg value="-pin" if="${signtoolpin != ''}" />
+        <arg value="${signtoolpin}" if="${signtoolpin != ''}" />
         <arg value="sign" />
         <arg value="${signinfo}" />
         <arg value="..\..\bin\release64\package.msix" />
@@ -109,11 +115,15 @@
     </delete>
     <if test="${file::exists('..\..\signinfo.txt')}">
       <exec program="${signtool}">
+        <arg value="-pin" if="${signtoolpin != ''}" />
+        <arg value="${signtoolpin}" if="${signtoolpin != ''}" />
         <arg value="sign" />
         <arg value="${signinfo}" />
         <arg value="..\..\bin\${msifilename}.msi" />
       </exec>
       <exec program="${signtool}">
+        <arg value="-pin" if="${signtoolpin != ''}" />
+        <arg value="${signtoolpin}" if="${signtoolpin != ''}" />
         <arg value="sign" />
         <arg value="${signinfo}" />
         <arg value="..\..\bin\${msifilename}-x64.msi" />
