@@ -3128,7 +3128,7 @@ LRESULT CSearchDlg::DoListNotify(LPNMITEMACTIVATE lpNMItemActivate)
                         if (pInfo->readError)
                             wcsncpy_s(pItem->pszText, pItem->cchTextMax, sReadError.c_str(), pItem->cchTextMax - 1LL);
                         else if (!pInfo->exception.empty())
-                            wcsncpy_s(pItem->pszText, pItem->cchTextMax, sRegexException.c_str(), pItem->cchTextMax - 1LL);
+                            wcsncpy_s(pItem->pszText, pItem->cchTextMax, pInfo->exception.c_str(), pItem->cchTextMax - 1LL);
                         else
                             swprintf_s(pItem->pszText, pItem->cchTextMax, L"%lld", pInfo->matchCount);
                         break;
@@ -4798,7 +4798,7 @@ int CSearchDlg::SearchByFilePath(CSearchInfo& sInfo, const std::wstring& searchR
 void CSearchDlg::SendResult(const CSearchInfo& sInfo, const int nCount)
 {
     SendMessage(*this, SEARCH_PROGRESS, (nCount >= 0), 0);
-    bool bAsResult = m_bNotSearch ? (nCount <= 0) : (nCount > 0);
+    bool bAsResult = m_bNotSearch ? (nCount <= 0) : (nCount >= 0);
     if (bAsResult)
         SendMessage(*this, SEARCH_FOUND, bAsResult, reinterpret_cast<LPARAM>(&sInfo));
 }
@@ -4856,6 +4856,7 @@ void CSearchDlg::SearchFile(CSearchInfo sInfo, const std::wstring& searchRoot)
     if (type == CTextFile::AutoType) // reading the file failed
     {
         sInfo.readError = true;
+        nCount = 0;
     }
     else if (bLoadResult && ((type != CTextFile::Binary) || m_bIncludeBinary)) // transcoded
     {
@@ -4867,7 +4868,7 @@ void CSearchDlg::SearchFile(CSearchInfo sInfo, const std::wstring& searchRoot)
         catch (const std::exception& ex)
         {
             sInfo.exception = CUnicodeUtils::StdGetUnicode(ex.what());
-            nCount          = 1;
+            nCount          = 0;
         }
     }
     else if ((type != CTextFile::Binary) || m_bIncludeBinary || m_bForceBinary)
@@ -4901,10 +4902,12 @@ void CSearchDlg::SearchFile(CSearchInfo sInfo, const std::wstring& searchRoot)
                 try
                 {
                     nCount = SearchByFilePath<char>(sInfo, searchRoot, searchExpression, replaceExpression, syntaxFlags, matchFlags, false);
+                    sInfo.exception = L"";
                 }
-                catch (...)
+                catch (const std::exception& ex)
                 {
-                    // regex error
+                    sInfo.exception = CUnicodeUtils::StdGetUnicode(ex.what());
+                    nCount          = 0;
                 }
                 if (nCount > 0)
                 {
@@ -4935,10 +4938,12 @@ void CSearchDlg::SearchFile(CSearchInfo sInfo, const std::wstring& searchRoot)
                     nCount += SearchByFilePath<wchar_t>(sInfo, searchRoot, searchExpression, replaceExpression, syntaxFlags, matchFlags, false);
                     if (type == CTextFile::Binary)
                         nCount += SearchByFilePath<wchar_t>(sInfo, searchRoot, searchExpression, replaceExpression, syntaxFlags, matchFlags, true);
+                    sInfo.exception = L"";
                 }
-                catch (...)
+                catch (const std::exception& ex)
                 {
-                    // regex error
+                    sInfo.exception = CUnicodeUtils::StdGetUnicode(ex.what());
+                    nCount          = 0;
                 }
                 if (nCount > 0)
                 {
