@@ -4408,7 +4408,7 @@ int CSearchDlg::SearchOnTextFile(CSearchInfo& sInfo, const std::wstring& searchR
             ++sInfo.matchCount;
             if (m_bReplace)
             {
-                regex_replace(replacedIter, startReplaceIter, blockEnd, wRegEx, std::ref(replaceFmt), mFlags);
+                replacedIter = regex_replace(replacedIter, startReplaceIter, blockEnd, wRegEx, std::ref(replaceFmt), mFlags);
                 startReplaceIter = blockEnd;
             }
             //
@@ -4680,14 +4680,14 @@ int CSearchDlg::SearchByFilePath(CSearchInfo& sInfo, const std::wstring& searchR
                 {
                     std::wstring replaced;
                     auto         replacedIter = std::back_inserter(replaced);
-                    regex_replace(replacedIter, startReplaceIter, blockEnd, regEx, std::ref(replaceFmt), mFlags);
+                    replacedIter = regex_replace(replacedIter, startReplaceIter, blockEnd, regEx, std::ref(replaceFmt), mFlags);
                     outFileBufA.sputn(reinterpret_cast<const char*>(replaced.c_str()), replaced.length() * 2);
                     startReplaceIter = blockEnd;
                 }
                 else
                 {
                     std::ostreambuf_iterator<char> outIter(&outFileBufA);
-                    regex_replace(outIter, startReplaceIter, blockEnd, regEx, std::ref(replaceFmt), mFlags);
+                    outIter = regex_replace(outIter, startReplaceIter, blockEnd, regEx, std::ref(replaceFmt), mFlags);
                     startReplaceIter = blockEnd;
                 }
             }
