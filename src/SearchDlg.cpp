@@ -347,6 +347,7 @@ CSearchDlg::CSearchDlg(HWND hParent)
     , m_showContentSet(false)
     , m_totalItems(0)
     , m_searchedItems(0)
+    , m_errorItems(0)
     , m_totalMatches(0)
     , m_selectedItems(0)
     , m_bAscending(true)
@@ -1099,7 +1100,10 @@ LRESULT CSearchDlg::DlgFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         {
             auto searchInfo = reinterpret_cast<CSearchInfo*>(lParam);
             m_totalMatches += static_cast<int>(searchInfo->matchCount);
-            if ((wParam != 0) || m_searchString.empty() || searchInfo->readError || !searchInfo->exception.empty() || m_bNotSearch)
+            bool bGotError  = searchInfo->readError || !searchInfo->exception.empty();
+            if (bGotError)
+                m_errorItems++;
+            if ((wParam != 0) || m_searchString.empty() || bGotError || m_bNotSearch)
             {
                 AddFoundEntry(searchInfo);
             }
@@ -1433,6 +1437,7 @@ LRESULT CSearchDlg::DoCommand(int id, int msg)
                         break;
                     }
                 }
+                m_errorItems    = 0;
                 m_searchedItems = 0;
                 m_totalItems    = 0;
 
@@ -2197,14 +2202,14 @@ void CSearchDlg::UpdateInfoLabel()
                        std::format(L"{:L}", m_searchedItems).c_str(),
                        std::format(L"{:L}", m_totalItems - m_searchedItems).c_str(),
                        std::format(L"{:L}", m_totalMatches).c_str(),
-                       std::format(L"{:L}", m_items.size()).c_str(),
+                       std::format(L"{:L}", m_items.size() - m_errorItems).c_str(),
                        std::format(L"{:L}", m_selectedItems).c_str());
         else
             swprintf_s(buf, _countof(buf), TranslatedString(hResource, IDS_INFOLABEL).c_str(),
                        std::format(L"{:L}", m_searchedItems).c_str(),
                        std::format(L"{:L}", m_totalItems - m_searchedItems).c_str(),
                        std::format(L"{:L}", m_totalMatches).c_str(),
-                       std::format(L"{:L}", m_items.size()).c_str());
+                       std::format(L"{:L}", m_items.size() - m_errorItems).c_str());
     }
     sText = buf;
 

@@ -208,6 +208,7 @@ private:
     std::mutex                       m_backupAndTempFilesMutex;
     int                              m_totalItems;
     int                              m_searchedItems;
+    int                              m_errorItems;
     int                              m_totalMatches;
     int                              m_selectedItems;
     bool                             m_bAscending;
